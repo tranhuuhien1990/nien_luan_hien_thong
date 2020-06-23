@@ -1,6 +1,9 @@
 # nien_luan_hien_thong
 Niên luận 2020 Hiền Thông
 
+Cài đặt thư viện:
+https://github.com/UB-Mannheim/tesseract/wiki
+
 https://pyforms.readthedocs.io/projects/Pyforms-GUI/en/v4/getting-started/the-basic.html
 
 
