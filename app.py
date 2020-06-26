@@ -2,6 +2,7 @@ from pyforms.basewidget import BaseWidget
 from pyforms.controls   import ControlFile
 from pyforms.controls   import ControlText
 from pyforms.controls   import ControlButton
+from pyforms.controls   import ControlLabel
 
 from pytesseract import Output
 import pytesseract
@@ -17,18 +18,19 @@ import win32api
 class ComputerVisionAlgorithm(BaseWidget):
 
     def __init__(self, *args, **kwargs):
-        super().__init__('Niên luận 2020 Hiền - Thông')
+        super().__init__('Tiểu luận 2020 - Trần Hữu Hiền')
 
         self.set_margin(10)
 
         #Definition of the forms fields
-        self._imgFile  = ControlFile('File')
-        self._runbutton  = ControlButton('Run')
-        self._outputfile = ControlText('Results output file')
+        self._controlLabel = ControlLabel('Tiểu luận 2020 - Trần Hữu hiền')
+        self._imgFile  = ControlFile('Chọn file')
+        self._runbutton  = ControlButton('Chọn')
+        self._outputfile = ControlText('Chữ trong hình')
 
         #Define the organization of the Form Controls
         self._formset = [
-            ('_imgFile', '_runbutton'), '_outputfile'
+             '_controlLabel', ('_imgFile', '_runbutton'), '_outputfile'
         ]
 
         #Define the function that will be called when a file is selected
