@@ -8,9 +8,6 @@ import pytesseract
 import argparse
 import cv2
 
-#capture screen
-import pyscreenshot as ImageGrab
-
 #capture screen by mouse
 import win32gui
 import win32ui
@@ -20,7 +17,7 @@ import win32api
 class ComputerVisionAlgorithm(BaseWidget):
 
     def __init__(self, *args, **kwargs):
-        super().__init__('Computer vision algorithm example')
+        super().__init__('Niên luận 2020 Hiền - Thông')
 
         self.set_margin(10)
 
@@ -35,52 +32,40 @@ class ComputerVisionAlgorithm(BaseWidget):
         ]
 
         #Define the function that will be called when a file is selected
-        self._runbutton.value = self.saveScreenShot
+        self._runbutton.value = self.__runAction
 
     def __runAction(self):
-
-        # part of the screen
-        im = ImageGrab.grab(bbox=(10, 10, 510, 510))  # X1,Y1,X2,Y2
-
-        # save image file
-        im.save('box.png')
-
         """Button action event"""
+        #Empty output
         self._outputfile.value = ""
-        # load the input image, convert it from BGR to RGB channel ordering,
-        # and use Tesseract to localize each area of text in the input image
-        image = cv2.imread('box.png')
+
+        #read input image
+        image = cv2.imread(self._imgFile.value)
+
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        results = pytesseract.image_to_data(rgb, output_type=Output.DICT, lang="eng")
+        results = pytesseract.image_to_data(rgb, output_type=Output.DICT, lang="jpn")
 
         for i in range(0, len(results["text"])):
             self._outputfile.value += results["text"][i]
+            # extract the bounding box coordinates of the text region from
+            # the current result
+            x = results["left"][i]
+            y = results["top"][i]
+            w = results["width"][i]
+            h = results["height"][i]
 
-    def saveScreenShot(self, x,y,width,height,path):
-        # grab a handle to the main desktop window
-        hdesktop = win32gui.GetDesktopWindow()
+            # extract the OCR text itself along with the confidence of the
+            # text localization
+            text = results["text"][i]
+            conf = int(results["conf"][i])
 
-        # create a device context
-        desktop_dc = win32gui.GetWindowDC(hdesktop)
-        img_dc = win32ui.CreateDCFromHandle(desktop_dc)
+            # strip out non-ASCII text so we can draw the text on the image
+            # using OpenCV, then draw a bounding box around the text along
+            # with the text itself
+            text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-        # create a memory based device context
-        mem_dc = img_dc.CreateCompatibleDC()
-
-        # create a bitmap object
-        screenshot = win32ui.CreateBitmap()
-        screenshot.CreateCompatibleBitmap(img_dc, width, height)
-        mem_dc.SelectObject(screenshot)
-
-
-        # copy the screen into our memory device context
-        mem_dc.BitBlt((0, 0), (width, height), img_dc, (x, y),win32con.SRCCOPY)
-
-        # save the bitmap to a file
-        screenshot.SaveBitmapFile(mem_dc, path)
-        # free our objects
-        mem_dc.DeleteDC()
-        win32gui.DeleteObject(screenshot.GetHandle())
+        cv2.imshow("Image", image)
 
 if __name__ == '__main__':
 
