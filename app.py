@@ -25,7 +25,7 @@ class ComputerVisionAlgorithm(BaseWidget):
         #Definition of the forms fields
         self._controlLabel = ControlLabel('Tiểu luận 2020 - Trần Hữu Hiền - Nguyễn Phú Thông')
         self._imgFile  = ControlFile('Chọn file')
-        self._runbutton  = ControlButton('Chọn')
+        self._runbutton  = ControlButton('Xử lý')
         self._outputfile = ControlText('Chữ trong hình')
 
         #Define the organization of the Form Controls
