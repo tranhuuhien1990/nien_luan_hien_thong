@@ -23,7 +23,7 @@ class ComputerVisionAlgorithm(BaseWidget):
         self.set_margin(10)
 
         #Definition of the forms fields
-        self._controlLabel = ControlLabel('Tiểu luận 2020 - Trần Hữu hiền')
+        self._controlLabel = ControlLabel('Tiểu luận 2020 - Trần Hữu Hiền - Nguyễn Phú Thông')
         self._imgFile  = ControlFile('Chọn file')
         self._runbutton  = ControlButton('Chọn')
         self._outputfile = ControlText('Chữ trong hình')
@@ -64,7 +64,7 @@ class ComputerVisionAlgorithm(BaseWidget):
             # strip out non-ASCII text so we can draw the text on the image
             # using OpenCV, then draw a bounding box around the text along
             # with the text itself
-            text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
+            text = " ".join([c if ord(c) < 128 else "" for c in text]).strip()
             cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         cv2.imshow("Image", image)
