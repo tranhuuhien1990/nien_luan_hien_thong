@@ -45,10 +45,13 @@ class ComputerVisionAlgorithm(BaseWidget):
         image = cv2.imread(self._imgFile.value)
 
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        results = pytesseract.image_to_data(rgb, output_type=Output.DICT, lang="jpn")
+        results = pytesseract.image_to_data(rgb, output_type=Output.DICT, lang="vie")
 
         for i in range(0, len(results["text"])):
             self._outputfile.value += results["text"][i]
+            if i != 0:
+                self._outputfile.value += " "
+            
             # extract the bounding box coordinates of the text region from
             # the current result
             x = results["left"][i]
@@ -64,10 +67,11 @@ class ComputerVisionAlgorithm(BaseWidget):
             # strip out non-ASCII text so we can draw the text on the image
             # using OpenCV, then draw a bounding box around the text along
             # with the text itself
-            text = " ".join([c if ord(c) < 128 else "" for c in text]).strip()
+            text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
             cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         cv2.imshow("Image", image)
+        self._outputfile.value = self._outputfile.value.strip()
 
 if __name__ == '__main__':
 
